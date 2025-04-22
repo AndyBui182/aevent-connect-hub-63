@@ -19,7 +19,7 @@ import {
 const eventData = {
   id: 1,
   title: 'Startup Weekend Hanoi 2023',
-  description: 'Startup Weekend is a 54-hour event where attendees pitch ideas, form teams, and start companies. It's a crash course in entrepreneurship where participants create working startups and learn about what it takes to start a company. Be part of a global community of entrepreneurs, mentors, and investors who are passionate about startups and innovation.',
+  description: "Startup Weekend is a 54-hour event where attendees pitch ideas, form teams, and start companies. It's a crash course in entrepreneurship where participants create working startups and learn about what it takes to start a company. Be part of a global community of entrepreneurs, mentors, and investors who are passionate about startups and innovation.",
   image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81',
   date: 'Oct 15-17, 2023',
   startTime: '5:00 PM',
