@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import ServicesPage from "./pages/services/index";
 import ConnectPage from "./pages/connect/index";
 import AboutPage from "./pages/about/index";
+import CreateEventPage from "./pages/create";
+import CollaborationRequestPage from "./pages/connect/request";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +28,8 @@ const App = () => (
           <Route path="/services/*" element={<ServicesPage />} />
           <Route path="/connect" element={<ConnectPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/create" element={<CreateEventPage />} />
+          <Route path="/connect/request" element={<CollaborationRequestPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -12,15 +12,21 @@ const JoinCTA = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button size="lg" className="bg-white text-aevent-primary hover:bg-gray-100 rounded-full">
-            <Link to="/create">Create Event</Link>
+            <Link to="/create">Tạo Sự Kiện</Link>
           </Button>
           <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 rounded-full">
             <Link to="/signup">Sign Up Free</Link>
           </Button>
         </div>
+        <div className="mt-6">
+          <Link to="/connect/request" className="inline-block">
+            <Button size="sm" variant="secondary" className="rounded-full bg-aevent-secondary hover:bg-aevent-primary text-white mt-2">
+              Đăng yêu cầu hợp tác
+            </Button>
+          </Link>
+        </div>
       </div>
     </section>
   );
 };
-
 export default JoinCTA;

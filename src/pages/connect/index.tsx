@@ -1,6 +1,6 @@
-
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const ConnectPage = () => {
   return (
@@ -19,9 +19,11 @@ const ConnectPage = () => {
             <p className="text-gray-600 mb-6">
               Looking for sponsors, speakers, or partners for your event?
             </p>
-            <Button className="w-full bg-aevent-primary hover:bg-aevent-secondary">
-              Post Collaboration Request
-            </Button>
+            <Link to="/connect/request">
+              <Button className="w-full bg-aevent-primary hover:bg-aevent-secondary">
+                Đăng yêu cầu hợp tác
+              </Button>
+            </Link>
           </div>
 
           <div className="bg-white rounded-lg p-8 shadow-sm">
