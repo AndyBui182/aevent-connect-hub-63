@@ -1,8 +1,11 @@
 
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/contexts/AuthContext';
 
 const JoinCTA = () => {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <section className="bg-gradient-to-r from-aevent-primary via-aevent-secondary to-aevent-bright text-white py-20">
       <div className="container mx-auto px-4 text-center">
@@ -14,9 +17,12 @@ const JoinCTA = () => {
           <Button size="lg" className="bg-white text-aevent-primary hover:bg-gray-100 rounded-full">
             <Link to="/create">Tạo Sự Kiện</Link>
           </Button>
-          <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 rounded-full">
-            <Link to="/signup">Sign Up Free</Link>
-          </Button>
+          
+          {!isAuthenticated && (
+            <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 rounded-full">
+              <Link to="/auth/signup">Sign Up Free</Link>
+            </Button>
+          )}
         </div>
         <div className="mt-6">
           <Link to="/connect/request" className="inline-block">
@@ -29,4 +35,5 @@ const JoinCTA = () => {
     </section>
   );
 };
+
 export default JoinCTA;

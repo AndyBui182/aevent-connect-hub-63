@@ -1,11 +1,33 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X, Search, User, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from '@/hooks/use-toast';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged out",
+      description: "You've been successfully logged out.",
+    });
+    navigate('/');
+  };
 
   return (
     <header className="relative z-10 bg-white shadow-sm">
@@ -40,9 +62,58 @@ const Header = () => {
             <Search className="w-4 h-4 mr-2" />
             Search
           </Button>
-          <Button size="sm" className="rounded-full bg-aevent-primary hover:bg-aevent-secondary">
-            Get Started
-          </Button>
+          
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="rounded-full">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-full bg-aevent-primary flex items-center justify-center text-white mr-2">
+                      {user?.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="hidden sm:inline">{user?.name}</span>
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/events/my-events')}>
+                  My Events
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/create')}>
+                  Create Event
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <div className="flex space-x-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="rounded-full"
+                onClick={() => navigate('/auth/login')}
+              >
+                Log in
+              </Button>
+              <Button 
+                size="sm" 
+                className="rounded-full bg-aevent-primary hover:bg-aevent-secondary"
+                onClick={() => navigate('/auth/signup')}
+              >
+                Sign up
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -70,14 +141,60 @@ const Header = () => {
             <Link to="/about" className="text-gray-700 hover:text-aevent-primary transition py-2">
               About
             </Link>
-            <div className="flex items-center space-x-4 pt-4 border-t">
+            <div className="flex flex-col space-y-2 pt-4 border-t">
               <Button variant="outline" size="sm" className="rounded-full w-full">
                 <Search className="w-4 h-4 mr-2" />
                 Search
               </Button>
-              <Button size="sm" className="rounded-full w-full bg-aevent-primary hover:bg-aevent-secondary">
-                Get Started
-              </Button>
+              
+              {isAuthenticated ? (
+                <>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full w-full justify-start"
+                    onClick={() => navigate('/profile')}
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    My Profile
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full w-full justify-start"
+                    onClick={() => navigate('/create')}
+                  >
+                    Create Event
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full w-full justify-start"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-full w-full"
+                    onClick={() => navigate('/auth/login')}
+                  >
+                    Log in
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="rounded-full w-full bg-aevent-primary hover:bg-aevent-secondary"
+                    onClick={() => navigate('/auth/signup')}
+                  >
+                    Sign up
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
