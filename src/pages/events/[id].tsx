@@ -15,7 +15,10 @@ import {
   FileText,
   FileImage,
   Link as LinkIcon,
-  ArrowLeft
+  ArrowLeft,
+  Globe,
+  MapPin as LocationPin,
+  Hash
 } from 'lucide-react';
 
 // Dummy data for a single event
@@ -28,6 +31,8 @@ const eventData = {
   startTime: '5:00 PM',
   endTime: '9:00 PM',
   location: 'Hanoi Innovation Hub, 38 Nguyen Co Thach, Hanoi, Vietnam',
+  eventType: 'offline', // Added event type (online/offline)
+  hashtags: ['startup', 'entrepreneurship', 'innovation', 'hanoi', 'techstars'], // Added hashtags
   category: 'Competition',
   attendees: 150,
   organizer: {
@@ -90,18 +95,36 @@ const EventDetailPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content - Left Column */}
           <div className="lg:col-span-2">
-            <div className="relative rounded-xl overflow-hidden mb-8">
+            <div className="relative rounded-xl overflow-hidden mb-6">
               <img 
                 src={event.image} 
                 alt={event.title} 
-                className="w-full h-64 md:h-96 object-cover"
+                className="w-full h-64 md:h-80 object-cover"
               />
-              <Badge className="absolute top-4 right-4 bg-aevent-primary hover:bg-aevent-secondary">
-                {event.category}
-              </Badge>
+              <div className="absolute top-4 right-4 flex flex-col gap-2">
+                <Badge className="bg-aevent-primary hover:bg-aevent-secondary mb-2">
+                  {event.category}
+                </Badge>
+                <Badge className={`${event.eventType === 'online' ? 'bg-aevent-bright' : 'bg-aevent-dark'}`}>
+                  {event.eventType === 'online' ? (
+                    <><Globe className="h-3 w-3 mr-1" /> Online</>
+                  ) : (
+                    <><LocationPin className="h-3 w-3 mr-1" /> In-Person</>
+                  )}
+                </Badge>
+              </div>
             </div>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-6">{event.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">{event.title}</h1>
+            
+            {/* Hashtags Section */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {event.hashtags?.map((tag, index) => (
+                <Badge key={index} variant="outline" className="bg-transparent text-gray-600 hover:bg-gray-100 border-gray-300">
+                  <Hash className="h-3 w-3 mr-1" /> {tag}
+                </Badge>
+              ))}
+            </div>
             
             <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
               <h2 className="text-xl font-semibold mb-4">About This Event</h2>
@@ -180,29 +203,7 @@ const EventDetailPage = () => {
           {/* Sidebar - Right Column */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
-              {/* Join Event Card */}
-              <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-4">Join This Event</h2>
-                <Button size="lg" className="w-full mb-3 bg-aevent-primary hover:bg-aevent-secondary">
-                  Register Now
-                </Button>
-                <Button size="lg" variant="outline" className="w-full mb-6">
-                  Save to Calendar
-                </Button>
-                
-                <div className="flex justify-between mb-6">
-                  <Button variant="ghost" size="sm" className="flex items-center">
-                    <Heart className="mr-1 h-4 w-4" />
-                    Interested
-                  </Button>
-                  <Button variant="ghost" size="sm" className="flex items-center">
-                    <Share className="mr-1 h-4 w-4" />
-                    Share
-                  </Button>
-                </div>
-              </div>
-              
-              {/* Event Details Card */}
+              {/* Event Details Card - Moved to the top */}
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h2 className="text-xl font-semibold mb-4">Event Details</h2>
                 <div className="space-y-4">
@@ -240,32 +241,32 @@ const EventDetailPage = () => {
                       <p className="text-gray-600">{event.attendees} registered</p>
                     </div>
                   </div>
-                  
-                  <div className="flex items-start">
-                    <User className="mr-3 h-5 w-5 text-aevent-primary mt-0.5" />
-                    <div>
-                      <p className="font-medium">Organized by</p>
-                      <p className="text-gray-600">{event.organizer.name}</p>
-                      <Button variant="link" className="p-0 h-auto text-aevent-primary hover:text-aevent-secondary mt-1">
-                        Contact Organizer
-                      </Button>
-                    </div>
-                  </div>
                 </div>
               </div>
               
-              {/* Event Location Map */}
+              {/* Join Event Card */}
               <div className="bg-white rounded-lg p-6 shadow-sm">
-                <h2 className="text-xl font-semibold mb-4">Event Location</h2>
-                <div className="rounded-lg overflow-hidden mb-4 h-48 bg-gray-100">
-                  {/* Map would go here */}
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    Map Placeholder
-                  </div>
+                <h2 className="text-xl font-semibold mb-4">Join This Event</h2>
+                <Button size="lg" className="w-full mb-3 bg-aevent-primary hover:bg-aevent-secondary">
+                  Register Now
+                </Button>
+                <Button size="lg" variant="outline" className="w-full mb-6">
+                  Save to Calendar
+                </Button>
+                
+                <div className="flex justify-between mb-6">
+                  <Button variant="ghost" size="sm" className="flex items-center">
+                    <Heart className="mr-1 h-4 w-4" />
+                    Interested
+                  </Button>
+                  <Button variant="ghost" size="sm" className="flex items-center">
+                    <Share className="mr-1 h-4 w-4" />
+                    Share
+                  </Button>
                 </div>
               </div>
               
-              {/* Event Attachments (replacing Discussion) */}
+              {/* Event Attachments */}
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h2 className="text-xl font-semibold mb-4">Event Materials</h2>
                 <div className="space-y-3">
