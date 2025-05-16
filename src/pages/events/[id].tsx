@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Layout from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { 
   Calendar, 
   MapPin, 
@@ -11,7 +12,9 @@ import {
   Clock, 
   User, 
   Heart, 
-  MessageSquare,
+  FileText,
+  FileImage,
+  Link as LinkIcon,
   ArrowLeft
 } from 'lucide-react';
 
@@ -33,9 +36,9 @@ const eventData = {
     description: 'Techstars is a global investment business that provides access to capital, one-on-one mentorship, and customized programming for early-stage entrepreneurs.'
   },
   sponsors: [
-    { name: 'Google for Startups', logo: 'https://via.placeholder.com/150' },
-    { name: 'Microsoft', logo: 'https://via.placeholder.com/150' },
-    { name: 'VietnamWorks', logo: 'https://via.placeholder.com/150' }
+    { name: 'Google for Startups', logo: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=150&h=150&fit=crop' },
+    { name: 'Microsoft', logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=150&h=150&fit=crop' },
+    { name: 'VietnamWorks', logo: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=150&h=150&fit=crop' }
   ],
   agenda: [
     { day: 'Day 1', title: 'Pitches & Team Formation', description: 'Participants pitch ideas, vote for the top ideas, and form teams.' },
@@ -48,7 +51,26 @@ const eventData = {
     { name: 'Michael Brown', role: 'Founder, StartupXYZ', image: 'https://randomuser.me/api/portraits/men/32.jpg' }
   ],
   featured: true,
-  status: 'upcoming'
+  status: 'upcoming',
+  attachments: [
+    { type: 'pdf', name: 'Event Schedule.pdf', size: '2.3 MB', url: '#' },
+    { type: 'image', name: 'Venue Map.jpg', size: '1.1 MB', url: '#' },
+    { type: 'pdf', name: 'Sponsor Information.pdf', size: '3.5 MB', url: '#' }
+  ],
+  relatedArticles: [
+    {
+      title: 'How to Prepare for Startup Weekend',
+      excerpt: 'Learn tips and tricks to make the most of your Startup Weekend experience.',
+      image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158',
+      url: '#'
+    },
+    {
+      title: 'Success Stories from Previous Startup Weekends',
+      excerpt: 'Read about companies that got their start at Startup Weekend events.',
+      image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
+      url: '#'
+    }
+  ]
 };
 
 const EventDetailPage = () => {
@@ -66,7 +88,7 @@ const EventDetailPage = () => {
         </Link>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
+          {/* Main Content - Left Column */}
           <div className="lg:col-span-2">
             <div className="relative rounded-xl overflow-hidden mb-8">
               <img 
@@ -79,32 +101,13 @@ const EventDetailPage = () => {
               </Badge>
             </div>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{event.title}</h1>
-            
-            <div className="flex flex-wrap gap-4 mb-6">
-              <div className="flex items-center text-gray-600">
-                <Calendar className="mr-2 h-5 w-5 text-aevent-primary" />
-                {event.date}
-              </div>
-              <div className="flex items-center text-gray-600">
-                <Clock className="mr-2 h-5 w-5 text-aevent-primary" />
-                {event.startTime} - {event.endTime}
-              </div>
-              <div className="flex items-center text-gray-600">
-                <MapPin className="mr-2 h-5 w-5 text-aevent-primary" />
-                {event.location}
-              </div>
-              <div className="flex items-center text-gray-600">
-                <Users className="mr-2 h-5 w-5 text-aevent-primary" />
-                {event.attendees} attendees
-              </div>
-            </div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-6">{event.title}</h1>
             
             <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
               <h2 className="text-xl font-semibold mb-4">About This Event</h2>
-              <p className="text-gray-700 mb-4">{event.description}</p>
+              <p className="text-gray-700 mb-6">{event.description}</p>
               
-              <h3 className="text-lg font-semibold mb-3 mt-6">Event Agenda</h3>
+              <h3 className="text-lg font-semibold mb-4 mt-6">Event Agenda</h3>
               <div className="space-y-4">
                 {event.agenda.map((item, index) => (
                   <div key={index} className="border-l-4 border-aevent-primary pl-4 py-2">
@@ -117,17 +120,19 @@ const EventDetailPage = () => {
             
             <div className="bg-white rounded-lg p-6 shadow-sm mb-8">
               <h2 className="text-xl font-semibold mb-4">Speakers</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {event.speakers.map((speaker, index) => (
-                  <div key={index} className="flex flex-col items-center text-center">
-                    <img 
-                      src={speaker.image} 
-                      alt={speaker.name} 
-                      className="w-20 h-20 rounded-full object-cover mb-3"
-                    />
-                    <h3 className="font-semibold">{speaker.name}</h3>
-                    <p className="text-gray-600 text-sm">{speaker.role}</p>
-                  </div>
+                  <Card key={index} className="overflow-hidden transition-all hover:shadow-md">
+                    <div className="p-4 flex flex-col items-center text-center">
+                      <img 
+                        src={speaker.image} 
+                        alt={speaker.name} 
+                        className="w-20 h-20 rounded-full object-cover mb-3"
+                      />
+                      <h3 className="font-semibold">{speaker.name}</h3>
+                      <p className="text-gray-600 text-sm">{speaker.role}</p>
+                    </div>
+                  </Card>
                 ))}
               </div>
             </div>
@@ -155,7 +160,7 @@ const EventDetailPage = () => {
                     <img 
                       src={sponsor.logo} 
                       alt={sponsor.name} 
-                      className="w-24 h-24 object-contain mb-2"
+                      className="w-24 h-24 object-cover rounded-lg mb-2"
                     />
                     <p className="text-gray-600 text-sm">{sponsor.name}</p>
                   </div>
@@ -172,10 +177,11 @@ const EventDetailPage = () => {
             </div>
           </div>
           
-          {/* Sidebar */}
+          {/* Sidebar - Right Column */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
+            <div className="sticky top-24 space-y-6">
+              {/* Join Event Card */}
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h2 className="text-xl font-semibold mb-4">Join This Event</h2>
                 <Button size="lg" className="w-full mb-3 bg-aevent-primary hover:bg-aevent-secondary">
                   Register Now
@@ -194,43 +200,123 @@ const EventDetailPage = () => {
                     Share
                   </Button>
                 </div>
-                
-                <div className="border-t pt-4">
-                  <div className="flex items-center text-gray-600 mb-2">
-                    <User className="mr-2 h-4 w-4 text-aevent-primary" />
-                    Created by <span className="font-medium ml-1">{event.organizer.name}</span>
+              </div>
+              
+              {/* Event Details Card */}
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-4">Event Details</h2>
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <Calendar className="mr-3 h-5 w-5 text-aevent-primary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Date</p>
+                      <p className="text-gray-600">{event.date}</p>
+                    </div>
                   </div>
-                  <Button variant="link" className="p-0 h-auto text-aevent-primary hover:text-aevent-secondary">
-                    <Link to="/contact-organizer">Contact Organizer</Link>
-                  </Button>
+                  
+                  <div className="flex items-start">
+                    <Clock className="mr-3 h-5 w-5 text-aevent-primary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Time</p>
+                      <p className="text-gray-600">{event.startTime} - {event.endTime}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <MapPin className="mr-3 h-5 w-5 text-aevent-primary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Location</p>
+                      <p className="text-gray-600">{event.location}</p>
+                      <Button variant="link" className="p-0 h-auto text-aevent-primary hover:text-aevent-secondary mt-1">
+                        Get Directions
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <Users className="mr-3 h-5 w-5 text-aevent-primary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Attendees</p>
+                      <p className="text-gray-600">{event.attendees} registered</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <User className="mr-3 h-5 w-5 text-aevent-primary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Organized by</p>
+                      <p className="text-gray-600">{event.organizer.name}</p>
+                      <Button variant="link" className="p-0 h-auto text-aevent-primary hover:text-aevent-secondary mt-1">
+                        Contact Organizer
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
               
-              <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
+              {/* Event Location Map */}
+              <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h2 className="text-xl font-semibold mb-4">Event Location</h2>
-                <div className="rounded-lg overflow-hidden mb-4 h-48 bg-gray-200">
+                <div className="rounded-lg overflow-hidden mb-4 h-48 bg-gray-100">
                   {/* Map would go here */}
                   <div className="w-full h-full flex items-center justify-center text-gray-400">
                     Map Placeholder
                   </div>
                 </div>
-                <p className="text-gray-700 mb-3">{event.location}</p>
-                <Button variant="outline" size="sm" className="w-full">
-                  Get Directions
-                </Button>
               </div>
               
-              <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
-                <h2 className="text-xl font-semibold mb-4">Discuss This Event</h2>
-                <div className="flex items-center mb-4">
-                  <MessageSquare className="mr-2 h-5 w-5 text-aevent-primary" />
-                  <span className="text-gray-600">12 comments</span>
+              {/* Event Attachments (replacing Discussion) */}
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-4">Event Materials</h2>
+                <div className="space-y-3">
+                  {event.attachments.map((file, index) => (
+                    <div key={index} className="flex items-center p-3 border rounded-md hover:bg-gray-50 transition-colors">
+                      {file.type === 'pdf' ? (
+                        <FileText className="h-5 w-5 text-aevent-primary mr-3" />
+                      ) : file.type === 'image' ? (
+                        <FileImage className="h-5 w-5 text-aevent-primary mr-3" />
+                      ) : (
+                        <LinkIcon className="h-5 w-5 text-aevent-primary mr-3" />
+                      )}
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{file.name}</p>
+                        <p className="text-gray-500 text-xs">{file.size}</p>
+                      </div>
+                      <Button size="sm" variant="ghost" asChild>
+                        <a href={file.url} download>Download</a>
+                      </Button>
+                    </div>
+                  ))}
                 </div>
-                <Button variant="outline" className="w-full">
-                  View Discussion
-                </Button>
               </div>
               
+              {/* Related Articles */}
+              <div className="bg-white rounded-lg p-6 shadow-sm">
+                <h2 className="text-xl font-semibold mb-4">Related Articles</h2>
+                <div className="space-y-4">
+                  {event.relatedArticles.map((article, index) => (
+                    <Link key={index} to={article.url} className="block group">
+                      <div className="flex gap-3">
+                        <img 
+                          src={article.image} 
+                          alt={article.title} 
+                          className="w-20 h-16 object-cover rounded"
+                        />
+                        <div>
+                          <h3 className="font-medium text-sm group-hover:text-aevent-primary transition-colors line-clamp-2">
+                            {article.title}
+                          </h3>
+                          <p className="text-gray-500 text-xs mt-1 line-clamp-2">
+                            {article.excerpt}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Services CTA */}
               <div className="bg-aevent-light bg-opacity-30 rounded-lg p-6">
                 <h2 className="text-lg font-semibold mb-3">Need Event Services?</h2>
                 <p className="text-gray-700 mb-4">
