@@ -18,7 +18,8 @@ import {
   ArrowLeft,
   Globe,
   MapPin as LocationPin,
-  Hash
+  Hash,
+  Handshake
 } from 'lucide-react';
 
 // Dummy data for a single event
@@ -35,6 +36,7 @@ const eventData = {
   hashtags: ['startup', 'entrepreneurship', 'innovation', 'hanoi', 'techstars'], // Added hashtags
   category: 'Competition',
   attendees: 150,
+  lookingForPartners: true, // Added looking for partners flag
   organizer: {
     name: 'TechStars Vietnam',
     logo: 'https://randomuser.me/api/portraits/men/32.jpg',
@@ -113,6 +115,21 @@ const EventDetailPage = () => {
                   )}
                 </Badge>
               </div>
+              
+              {/* Looking for partners tag */}
+              {event.lookingForPartners && (
+                <div className="absolute bottom-4 right-4">
+                  <Badge 
+                    className="bg-aevent-primary hover:bg-aevent-secondary text-white px-3 py-1.5 text-sm shadow-md"
+                    style={{ 
+                      background: "linear-gradient(90deg, hsla(277, 75%, 84%, 1) 0%, hsla(297, 50%, 51%, 1) 100%)"
+                    }}
+                  >
+                    <Handshake className="h-4 w-4 mr-1.5" />
+                    Looking for partners
+                  </Badge>
+                </div>
+              )}
             </div>
             
             <h1 className="text-3xl md:text-4xl font-bold mb-4">{event.title}</h1>
