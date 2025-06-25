@@ -4,6 +4,8 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 type User = {
   name: string;
   email: string;
+  avatar?: string;
+  provider?: 'email' | 'google';
 };
 
 type AuthContextType = {
@@ -11,6 +13,7 @@ type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   signup: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
 };
@@ -48,6 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userData = {
           name: email.split('@')[0],
           email: email,
+          provider: 'email' as const,
         };
         
         setUser(userData);
@@ -56,6 +60,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false);
         resolve();
       }, 1000);
+    });
+  };
+
+  const loginWithGoogle = async () => {
+    setIsLoading(true);
+    
+    // Simulate Google OAuth flow
+    return new Promise<void>((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          // In a real app, this would be handled by Google OAuth
+          const mockGoogleUser = {
+            name: 'Google User',
+            email: 'user@gmail.com',
+            avatar: 'https://via.placeholder.com/40',
+            provider: 'google' as const,
+          };
+          
+          setUser(mockGoogleUser);
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('user', JSON.stringify(mockGoogleUser));
+          setIsLoading(false);
+          resolve();
+        } catch (error) {
+          setIsLoading(false);
+          reject(error);
+        }
+      }, 1500);
     });
   };
 
@@ -82,6 +114,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: !!user,
     isLoading,
     login,
+    loginWithGoogle,
     signup,
     logout,
   };

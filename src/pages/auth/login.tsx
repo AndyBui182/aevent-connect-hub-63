@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Lock, ArrowRight } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -13,29 +15,28 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API request
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      // For demonstration, we'll simulate a successful login
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('user', JSON.stringify({
-        name: 'Demo User',
-        email: email,
-      }));
-      
+    try {
+      await login(email, password);
       toast({
         title: "Welcome back!",
         description: "You've successfully logged in.",
       });
-      
       navigate('/');
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -53,6 +54,19 @@ const LoginPage = () => {
         <div className="w-full max-w-md p-8 bg-white rounded-xl shadow-sm">
           <h1 className="text-2xl font-bold mb-2">Welcome back</h1>
           <p className="text-gray-500 mb-6">Log in to your Aevent account</p>
+          
+          {/* Google Login Button */}
+          <GoogleLoginButton />
+          
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500">Or continue with</span>
+            </div>
+          </div>
           
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
